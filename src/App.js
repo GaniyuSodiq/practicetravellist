@@ -2,11 +2,17 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
+  const [items, setItems] = useState([]);
+
+  function handleAddItems(newItems) {
+    setItems([...items, newItems]);
+  }
+
   return (
     <div className="app">
       <Header />
-      <Form />
-      <ParkingList />
+      <Form onAddItems={handleAddItems} />
+      <ParkingList items={items} />
       <Stats />
     </div>
   );
@@ -20,10 +26,9 @@ function Header() {
   );
 }
 
-function Form() {
+function Form({ onAddItems }) {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [items, setItems] = useState([]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -38,7 +43,8 @@ function Form() {
     };
 
     console.log(newItems);
-    setItems([...items, newItems]);
+
+    onAddItems(newItems);
 
     setDescription("");
     setQuantity(1);
@@ -62,20 +68,24 @@ function Form() {
   );
 }
 
-function ParkingList() {
+function ParkingList({ items }) {
   return (
-    <div>
+    <div className="list">
       <ul>
-        <Items />
+        {items.map((item) => (
+          <Items item={item} key={item.id} />
+        ))}
       </ul>
     </div>
   );
 }
 
-function Items() {
+function Items({ item }) {
   return (
     <div>
-      <li></li>
+      <li>
+        {item.quantity} {item.description} <button>❌</button>
+      </li>
     </div>
   );
 }
