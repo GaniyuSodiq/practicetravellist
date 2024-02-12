@@ -23,8 +23,28 @@ function Header() {
 function Form() {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [items, setItems] = useState([]);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    if (!description) return;
+
+    const newItems = {
+      id: Date.now(),
+      quantity,
+      description,
+      packed: false,
+    };
+
+    console.log(newItems);
+    setItems([...items, newItems]);
+
+    setDescription("");
+    setQuantity(1);
+  }
   return (
-    <div className="add-form">
+    <form className="add-form" onSubmit={handleSubmit}>
       <h3>What are you paccking for the trip ✈?</h3>
       <select value={quantity} onChange={(e) => setQuantity(e.target.value)}>
         {Array.from({ length: 20 }, (v, i) => i + 1).map((num) => (
@@ -38,7 +58,7 @@ function Form() {
         onChange={(e) => setDescription(e.target.value)}
       />
       <button>add</button>
-    </div>
+    </form>
   );
 }
 
